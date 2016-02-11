@@ -39,6 +39,7 @@ function user_friends_init() {
 	elgg_register_plugin_hook_handler('view', 'widgets/friends/content', 'user_friends_friends_widget_access');
 
 	// Custom friend request notifications
+	elgg_unregister_event_handler('create', 'relationship', '_elgg_send_friend_notification');
 	elgg_unregister_event_handler('create', 'relationship', '\ColdTrick\FriendRequest\Relationships::createFriendRequest');
 	elgg_register_event_handler('create', 'relationship', 'user_friends_friend_request_notification');
 	elgg_register_plugin_hook_handler('get_templates', 'notifications', 'user_friends_notification_templates');
