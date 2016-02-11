@@ -37,6 +37,13 @@ function user_friends_init() {
 	}
 
 	elgg_register_plugin_hook_handler('view', 'widgets/friends/content', 'user_friends_friends_widget_access');
+
+	// Custom friend request notifications
+	elgg_unregister_event_handler('create', 'relationship', '\ColdTrick\FriendRequest\Relationships::createFriendRequest');
+	elgg_register_event_handler('create', 'relationship', 'user_friends_friend_request_notification');
+	elgg_register_plugin_hook_handler('get_templates', 'notifications', 'user_friends_notification_templates');
+	elgg_register_action('friend_request/approve', __DIR__ . '/actions/approve.php');
+	elgg_register_action('friend_request/decline', __DIR__ . '/actions/decline.php');
 }
 
 /**
@@ -257,7 +264,7 @@ function user_friends_friendship_menu_setup($hook, $type, $return, $params) {
 					'confirm' => true,
 		]);
 	} else if (check_entity_relationship($entity->guid, 'friendrequest', $viewer->guid)) {
-// received request
+		// received request
 		$return[] = ElggMenuItem::factory([
 					'name' => 'friend:approve',
 					'href' => "action/friend_request/approve?guid={$entity->guid}",
@@ -271,7 +278,7 @@ function user_friends_friendship_menu_setup($hook, $type, $return, $params) {
 					'confirm' => true,
 		]);
 	} else if (check_entity_relationship($viewer->guid, 'friendrequest', $entity->guid)) {
-// sent request
+		// sent request
 		$return[] = ElggMenuItem::factory([
 					'name' => 'friend:revoke',
 					'href' => "action/friend_request/revoke?guid={$entity->guid}",
@@ -356,4 +363,144 @@ function user_friends_friends_widget_access($hook, $type, $return, $params) {
 	if (!user_friends_can_view_friends($owner)) {
 		return elgg_format_element('p', ['class' => 'elgg-no-results'], elgg_echo('user:friends:no_access'));
 	}
+}
+
+/**
+ * Friend request notification
+ *
+ * @param string           $event        "create"
+ * @param stirng           $type         "relationship
+ * @param ElggRelationship $relationship Relationship object
+ * @return void
+ */
+function user_friends_friend_request_notification($event, $type, $relationship) {
+
+	if (!$relationship instanceof ElggRelationship) {
+		return;
+	}
+
+	if ($relationship->relationship !== 'friendrequest') {
+		return;
+	}
+
+	$user = get_entity($relationship->guid_one);
+	$friend = get_entity($relationship->guid_two);
+
+	if (!$user || !$friend) {
+		return;
+	}
+
+	$hmac = elgg_build_hmac(array(
+		'a' => 'approve',
+		'u' => $user->guid,
+		'f' => $friend->guid,
+	));
+	$approve_url = elgg_http_add_url_query_elements(elgg_normalize_url("friends/{$friend->username}/confirm"), array(
+		'a' => 'approve',
+		'u' => $user->guid,
+		'f' => $friend->guid,
+		'm' => $hmac->getToken(),
+	));
+
+	$hmac = elgg_build_hmac(array(
+		'a' => 'decline',
+		'u' => $user->guid,
+		'f' => $friend->guid,
+	));
+	$decline_url = elgg_http_add_url_query_elements(elgg_normalize_url("friends/{$friend->username}/confirm"), array(
+		'a' => 'decline',
+		'u' => $user->guid,
+		'f' => $friend->guid,
+		'm' => $hmac->getToken(),
+	));
+
+	$list_url = elgg_normalize_url("friends/{$friend->username}/requests");
+
+	// Notify target user
+	$subject = elgg_echo('friend_request:newfriend:subject', [$user->name]);
+	$message = elgg_echo('friend_request:newfriend:body', [
+		$user->name,
+		$list_url,
+	]);
+
+	notify_user($friend->guid, $user->guid, $subject, $message, [
+		'template' => 'friend_request_new',
+		'action' => 'friend_request',
+		'object' => $friend,
+		'approve_url' => $approve_url,
+		'decline_url' => $decline_url,
+		'list_url' => $list_url,
+	]);
+}
+
+/**
+ * Add some instant notificaiton actions to the editable templates
+ *
+ * @param string $hook   "get_templates"
+ * @param string $type   "notifications"
+ * @param string $return Template names
+ * @param array  $params Hook params
+ * @return array
+ */
+function user_friends_notification_templates($hook, $type, $return, $params) {
+
+	$return[] = "friend_request_new";
+	$return[] = "friend_request_approved";
+	$return[] = "friend_request_denied";
+
+	return $return;
+}
+
+/**
+ * Approve friendship request between two users
+ *
+ * @param ElggUser $user   User being requested
+ * @param ElggUser $friend User requesting
+ * @return bool
+ */
+function user_friends_approve_friend_request(ElggUser $user, ElggUser $friend) {
+
+	if (!remove_entity_relationship($friend->guid, 'friendrequest', $user->guid)) {
+		return false;
+	}
+
+	$user->addFriend($friend->guid);
+	$friend->addFriend($user->guid);
+
+	$subject = elgg_echo('friend_request:approve:subject', [$user->name]);
+	$message = elgg_echo('friend_request:approve:message', [$friend->name, $user->name]);
+
+	notify_user($friend->guid, $user->guid, $subject, $message, [
+		'template' => 'friend_request_approved',
+		'action' => 'add_friend',
+		'object' => $friend,
+	]);
+
+	friend_request_create_river_events($user->guid, $friend->guid);
+	return true;
+}
+
+/**
+ * Decline friendship request between two users
+ * 
+ * @param ElggUser $user   User being requested
+ * @param ElggUser $friend User requesting
+ * @return bool
+ */
+function user_friends_decline_friend_request(ElggUser $user, ElggUser $friend) {
+
+	if (!remove_entity_relationship($friend->guid, 'friendrequest', $user->guid)) {
+		return false;
+	}
+
+	$subject = elgg_echo('friend_request:decline:subject', [$user->name]);
+	$message = elgg_echo('friend_request:decline:message', [$friend->name, $user->name]);
+
+	notify_user($friend->guid, $user->guid, $subject, $message, [
+		'template' => 'friend_request_declined',
+		'action' => 'friend_request_decline',
+		'object' => $friend,
+	]);
+
+	return true;
 }

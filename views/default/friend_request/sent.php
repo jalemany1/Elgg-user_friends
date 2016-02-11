@@ -12,8 +12,13 @@ $options = [
 	'inverse_relationship' => false,
 	'offset_key' => 'offset_sent',
 	'no_results' => elgg_echo('friend_request:sent:none'),
+	'pagination' => elgg_is_active_plugin('hypeLists') || !elgg_in_context('widgets'),
+	'pagination_type' => 'default',
+	'list_id' => "friend-requests-sent-{$user->guid}",
 	'item_view' => 'user/format/friend',
+	'auto_refresh' => false,
 	'friend' => $user,
+	'data-selector-delete' => '.elgg-menu-friendship > li > a',
 ];
 
 $content = elgg_list_entities_from_relationship($options);

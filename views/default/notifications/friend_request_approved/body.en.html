@@ -1,0 +1,19 @@
+<p><a href="{{actor.getURL}}">{{actor.name}}</a> approved your friendship request.</p>
+
+<div class="elgg-image-block container">
+	<div class="elgg-image">
+		<img src="{{actor.getIconURL}}" alt="{{actor.name}}" />
+	</div>
+	<div class="elgg-body">
+		<h3><a href="{{actor.getURL}}">{{actor.name}}</a></h3>
+		<p>
+			{{& actor.briefdescription}}
+		</p>
+	</div>
+</div>
+
+<div itemprop="potentialAction" itemscope itemtype="http://schema.org/ViewAction">
+	<a href="{{object.getURL}}" class="elgg-button" itemprop="target">View Profile</a>
+    <meta itemprop="name" content="View Profile"/>
+</div>
+<meta itemprop="description" content="View {{actor.name}}'s profile at {{site.name}}"/>

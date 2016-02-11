@@ -34,4 +34,6 @@ return [
 
 	'user:friends:settings:empty' => 'There are no settings that require your attention at this time',
 	
+	'user:friends:confirm_error' => 'This URL is invalid or has expired. Please login and approve the request manually',
+	
 ];

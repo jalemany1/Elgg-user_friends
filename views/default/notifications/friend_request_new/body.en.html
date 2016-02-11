@@ -1,0 +1,25 @@
+<p>You have a new friendship request from {{actor.name}}</p>
+
+<div class="elgg-image-block container">
+	<div class="elgg-image">
+		<img src="{{actor.getIconURL}}" alt="{{actor.name}}" />
+	</div>
+	<div class="elgg-body">
+		<h3><a href="{{actor.getURL}}">{{actor.name}}</a></h3>
+		<p>
+			{{& actor.briefdescription}}
+		</p>
+	</div>
+</div>
+
+<div itemprop="potentialAction" itemscope itemtype="http://schema.org/ConfirmAction">
+    <meta itemprop="name" content="Approve Request"/>
+    <div itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+		<a class="elgg-button" itemprop="url" href="{{params.approve_url}}">Approve</a>
+    </div>
+</div>
+
+<meta itemprop="description" content="Approve friendship request from {{actor.name}}" />
+
+<p>You can view your friendship requests <a href="{{params.list_url}}">here</a>.
+	You can decline this request by clicking <a href="{{params.decline_url}}">here</a>.</p>

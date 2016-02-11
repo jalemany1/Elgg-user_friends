@@ -20,9 +20,16 @@
 
 	<requires>
 		<type>plugin</type>
-		<name>friend_request</name>
+		<plugin>friend_request</plugin>
+		<priority>after</priority>
 	</requires>
-
+	
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>friend_request</plugin>
+	</requires>
+	
 	<requires>
 		<type>plugin</type>
 		<name>forms_api</name>
