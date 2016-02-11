@@ -1,0 +1,24 @@
+{
+	"name": "hypejunction/user_friends",
+	"version": "1.0.3",
+	"type": "elgg-plugin",
+	"description": "Improved friends pages for Elgg",
+	"homepage": "http://hypejunction.com",
+	"keywords": [
+		"elgg", "plugin", "friends"
+	],
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Ismayil Khayredinov",
+			"email": "info@hypejunction.com"
+		}
+	],
+	"require": {
+		"php": ">=5.5",
+		"composer/installers": "~1.0",
+		"coldtrick/friend_request": "~4.0",
+		"hypejunction/forms_api": "~1.0"
+	}
+}
+
