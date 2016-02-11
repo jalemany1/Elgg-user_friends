@@ -35,6 +35,8 @@ function user_friends_init() {
 		elgg_register_plugin_hook_handler('route', 'invite', 'user_friends_route_invite');
 		elgg_unregister_menu_item('page', 'invite');
 	}
+
+	elgg_register_plugin_hook_handler('view', 'widgets/friends/content', 'user_friends_friends_widget_access');
 }
 
 /**
@@ -331,4 +333,27 @@ function user_friends_topbar_menu_setup($hook, $type, $return, $params) {
 
 	$return[] = $item;
 	return $return;
+}
+
+/**
+ * Prevents the widget from showing friends if friend visibility criteria is not met
+ * 
+ * @param string $hook   "view"
+ * @param string $type   "widgets/friends/content"
+ * @param string $return View
+ * @param array  $params Hook params
+ * @return string
+ */
+function user_friends_friends_widget_access($hook, $type, $return, $params) {
+
+	$vars = elgg_extract('vars', $params);
+	$entity = elgg_extract('entity', $vars);
+	if (!$entity instanceof ElggWidget) {
+		return;
+	}
+
+	$owner = $entity->getOwnerEntity();
+	if (!user_friends_can_view_friends($owner)) {
+		return elgg_format_element('p', ['class' => 'elgg-no-results'], elgg_echo('user:friends:no_access'));
+	}
 }
