@@ -1,6 +1,6 @@
 {
 	"name": "hypejunction/user_friends",
-	"version": "1.0.3",
+	"version": "1.0.0",
 	"type": "elgg-plugin",
 	"description": "Improved friends pages for Elgg",
 	"homepage": "http://hypejunction.com",
