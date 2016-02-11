@@ -1,5 +1,12 @@
 <?php
 
+if (!elgg_get_plugin_setting('allow_visibility_override', 'user_friends', true)) {
+	echo elgg_format_element('p', [
+		'class' => 'elgg-no-results',
+			], elgg_echo('user:friends:settings:empty'));
+	return;
+}
+
 $entity = elgg_extract('entity', $vars);
 /* @var $entity \ElggPlugin */
 

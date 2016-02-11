@@ -16,6 +16,17 @@ echo elgg_view_input('select', array(
 ));
 
 echo elgg_view_input('select', array(
+	'name' => 'params[allow_visibility_override]',
+	'value' => isset($entity->allow_visibility_override) ? $entity->allow_visibility_override : true,
+	'options_values' => array(
+		0 => elgg_echo('option:no'),
+		1 => elgg_echo('option:yes'),
+	),
+	'label' => elgg_echo('user:friends:allow_visibility_override'),
+	'help' => elgg_echo('user:friends:allow_visibility_override:help'),
+));
+
+echo elgg_view_input('select', array(
 	'name' => 'params[show_collections]',
 	'value' => isset($entity->show_collections) ? $entity->show_collections : true,
 	'options_values' => array(

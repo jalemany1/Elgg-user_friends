@@ -7,7 +7,9 @@ return [
 	'user:friends:visibility:friends' => 'Friends',
 	'user:friends:visibility:logged_in' => 'Logged in users',
 	'user:friends:visibility:public' => 'Everyone',
-	
+	'user:friends:allow_visibility_override' => 'Allow visibility overrides',
+	'user:friends:allow_visibility_override:help' => 'Allow individual users to change their friend list visibility setting',
+
 	'user:friends:show_collections' => 'Show Collections page',
 	'user:friends:show_collections:help' => 'Allow users to create custom user collections',
 	'user:friends:allow_revoke' => 'Allow revoking friend requests',
@@ -29,4 +31,7 @@ return [
 	'user:friends:last_action' => 'Last seen %s',
 
 	'friend:add_to_collection' => 'Add to collection',
+
+	'user:friends:settings:empty' => 'There are no settings that require your attention at this time',
+	
 ];
