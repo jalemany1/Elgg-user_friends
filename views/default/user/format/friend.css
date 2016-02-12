@@ -19,3 +19,15 @@
 .elgg-user-friend .elgg-content {
 	margin: 0;
 }
+.elgg-friend-subtitle-element {
+	font-style: normal;
+}
+.elgg-friend-subtitle-element:after {
+	content: "|";
+	padding: 0 5px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.elgg-friend-subtitle-element:last-of-type:after {
+	content: none;
+}

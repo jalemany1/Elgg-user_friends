@@ -44,13 +44,24 @@ if ($query && elgg_is_active_plugin('search')) {
 
 $subtitle = elgg_trigger_plugin_hook('subtitle', 'user', $vars, $subtitle);
 
+$subtitle_str = '';
+foreach ($subtitle as $s) {
+	$subtitle_str .= elgg_format_element('span', ['class' => 'elgg-friend-subtitle-element'], $s);
+}
+
+if ($entity->briefdescription) {
+	$view_subtitle = $subtitle_str . '<br />' . $entity->briefdescription;
+} else {
+	$view_subtitle = $subtitle_str;
+}
+
 $icon = elgg_view_entity_icon($entity, $size);
 $summary = elgg_view('user/elements/summary', array(
 	'entity' => $entity,
 	'title' => $title,
 	'metadata' => $metadata,
 	'content' => $menu,
-	'subtitle' => implode(' | ', array_filter($subtitle)),
+	'subtitle' => $view_subtitle,
 		));
 
 echo elgg_view_image_block($icon, $summary, array(
