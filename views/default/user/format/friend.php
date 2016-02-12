@@ -21,18 +21,14 @@ if ($entity->last_action) {
 	$subtitle['last_action'] = elgg_echo('user:friends:last_action', [elgg_get_friendly_time($entity->last_action)]);
 }
 
-$menu = elgg_view_menu('friendship', array(
-	'entity' => $entity,
-	'sort_by' => 'priority',
-));
+$menu_params = $vars;
+$menu_params['sort_by'] = 'priority';
+$menu = elgg_view_menu('membership', $menu_params);
 
 $metadata = '';
 if (!elgg_in_context('widgets')) {
-	$metadata = elgg_view_menu('entity', array(
-		'entity' => $entity,
-		'sort_by' => 'priority',
-		'class' => 'elgg-menu-hz',
-	));
+	$menu_params['class'] = 'elgg-menu-hz';
+	$metadata = elgg_view_menu('entity', $menu_params);
 }
 
 $title = null;

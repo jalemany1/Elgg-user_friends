@@ -1,7 +1,7 @@
 <?php
 
 $entity = elgg_extract('entity', $vars, elgg_get_page_owner_entity());
-$filter_context = elgg_extract('filter_context', $vars, 'user');
+$filter_context = elgg_extract('filter_context', $vars, 'index');
 
 $tabs = [
 	'index' => "friends/$entity->username",
