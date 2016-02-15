@@ -1,3 +1,19 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/hypeJunction/Elgg-user_friends/compare/1.0.0...v1.0.1) (2016-02-15)
+
+
+### Bug Fixes
+
+* **listing:** do not output an empty string ([e5ae623](https://github.com/hypeJunction/Elgg-user_friends/commit/e5ae623))
+* **listing:** use multiple attributes to determine last action ([83c0310](https://github.com/hypeJunction/Elgg-user_friends/commit/83c0310))
+
+### Features
+
+* **listing:** improve user listing formatting and styling ([322d3df](https://github.com/hypeJunction/Elgg-user_friends/commit/322d3df))
+* **listing:** pass more context to menus ([f990a5a](https://github.com/hypeJunction/Elgg-user_friends/commit/f990a5a))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2016-02-11)
 
