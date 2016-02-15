@@ -18,7 +18,7 @@ if (isset($friend_count)) {
 //$subtitle[] = elgg_echo('user:friends:member_since', [date('j M, Y', $entity->time_created)]);
 
 if ($entity->last_action) {
-	$subtitle['last_action'] = elgg_echo('user:friends:last_action', [elgg_get_friendly_time($entity->last_action)]);
+	$subtitle['last_action'] = elgg_echo('user:friends:last_action', [elgg_get_friendly_time($entity->last_action ? : $entity->last_login)]);
 }
 
 $menu_params = $vars;
@@ -50,7 +50,11 @@ foreach ($subtitle as $s) {
 }
 
 if ($entity->briefdescription) {
-	$view_subtitle = $subtitle_str . '<br />' . $entity->briefdescription;
+	if ($subtitle_str) {
+		$view_subtitle = $subtitle_str . '<br />' . $entity->briefdescription;
+	} else {
+		$view_subtitle = $entity->briefdescription;
+	}
 } else {
 	$view_subtitle = $subtitle_str;
 }
