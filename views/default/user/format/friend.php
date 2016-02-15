@@ -17,8 +17,9 @@ if (isset($friend_count)) {
 
 //$subtitle[] = elgg_echo('user:friends:member_since', [date('j M, Y', $entity->time_created)]);
 
-if ($entity->last_action) {
-	$subtitle['last_action'] = elgg_echo('user:friends:last_action', [elgg_get_friendly_time($entity->last_action ? : $entity->last_login)]);
+$last_action = max($entity->last_action, $entity->last_login, $entity->time_created);
+if ($last_action) {
+	$subtitle['last_action'] = elgg_echo('user:friends:last_action', [elgg_get_friendly_time($last_action)]);
 }
 
 $menu_params = $vars;
