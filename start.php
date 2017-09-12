@@ -77,7 +77,7 @@ function user_friends_can_view_friends(ElggUser $user, ElggUser $viewer = null) 
 			break;
 
 		case ACCESS_FRIENDS:
-			$permission = $viewer && $user->isFriendsWith($viewer->guid);
+			$permission = $viewer && ($user->isFriendsWith($viewer->guid) || $user->canEdit($viewer->guid));
 			break;
 
 		case ACCESS_LOGGED_IN :
