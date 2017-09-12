@@ -24,7 +24,7 @@ if ($last_action) {
 
 $menu_params = $vars;
 $menu_params['sort_by'] = 'priority';
-$menu = elgg_view_menu('membership', $menu_params);
+$menu = elgg_view_menu('friendship', $menu_params);
 
 $metadata = '';
 if (!elgg_in_context('widgets')) {
