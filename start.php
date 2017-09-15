@@ -45,6 +45,7 @@ function user_friends_init() {
 	elgg_register_plugin_hook_handler('get_templates', 'notifications', 'user_friends_notification_templates');
 	elgg_register_action('friend_request/approve', __DIR__ . '/actions/approve.php');
 	elgg_register_action('friend_request/decline', __DIR__ . '/actions/decline.php');
+	elgg_register_action('friend_request/revoke', __DIR__ . '/actions/revoke.php');
 }
 
 /**
